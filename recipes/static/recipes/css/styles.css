@@ -156,8 +156,14 @@
             max-width: 100%;
         }
 
+        .recipe-cover {
+            margin: 0 auto;
+            align-items: center;
+        }
+
         .recipe-list-item {
-            max-width: 44rem;
+            max-width: 54rem;
+            height: fit-content;
         }
 
         .recipe-list-item:hover {
