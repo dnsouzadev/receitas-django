@@ -1,9 +1,11 @@
 <div class="recipe recipe-list-item">
-    <div class="recipe-cover">
-        <a href="{% url 'recipes-recipe' recipe.id %}">
-            <img src="{{ recipe.cover.url }}" alt="Temporário">
-        </a>
-    </div>
+    {% if recipe.cover.url is not Null %}
+        <div class="recipe-cover">
+            <a href="{% url 'recipes-recipe' recipe.id %}">
+                <img src="{{ recipe.cover.url }}" alt="Temporário">
+            </a>
+        </div>
+    {% endif %}
     <div class="recipe-title-container">
         <h2 class="recipe-title">
             <a href="{% url 'recipes-recipe' recipe.id %}">
