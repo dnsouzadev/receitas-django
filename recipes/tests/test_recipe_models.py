@@ -50,3 +50,12 @@ class RecipeModelTest(RecipeTestBase):
             recipe.is_published,
             msg='Recipe preparation_steps_is_html is not False'
         )
+
+    def test_recipe_string_representation(self):
+        self.recipe.title = 'Testing Representation'
+        self.recipe.full_clean()
+        self.recipe.save()
+        self.assertEqual(
+            str(self.recipe), 'Testing Representation',
+            msg='Recipe string representation should be equal title'
+        )
