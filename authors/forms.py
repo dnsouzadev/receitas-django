@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import ValidationError
@@ -5,6 +7,19 @@ from django.forms import ValidationError
 
 def add_placeholder(field, placeholder_val):
     field.widget.attrs['placeholder'] = placeholder_val
+
+
+def strong_password(password):
+    regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
+
+    if not regex.match(password):
+        raise ValidationError((
+            'Password must have at least one uppercase letter, '
+            'one lowercase letter and one number. The length should be '
+            'at least 8 characters.'
+        ),
+            code='invalid'
+        )
 
 
 class RegisterForm(forms.ModelForm):
@@ -27,7 +42,8 @@ class RegisterForm(forms.ModelForm):
             'Password must have at least one uppercase letter, '
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'
-        )
+        ),
+        validators=[strong_password]
     )
     password2 = forms.CharField(
         required=True,
@@ -92,6 +108,5 @@ class RegisterForm(forms.ModelForm):
 
         if password != password2:
             raise ValidationError({
-                'password': 'Password and password2 must be equal',
                 'password2': 'Password and password2 must be equal'
             })
