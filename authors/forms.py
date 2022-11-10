@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import ValidationError
 
 
 def add_placeholder(field, placeholder_val):
@@ -69,3 +70,28 @@ class RegisterForm(forms.ModelForm):
                 'placeholder': 'Type your password here'
             })
         }
+
+    # clean field is for validate the password (def clean_{field})
+    # def clean_password(self):
+    #     data = self.cleaned_data.get('password')
+
+    #     if 'atencao' in data:
+    #         raise ValidationError(
+    #             'Não digite %(value)s no campo password',
+    #             code='invalid',
+    #             params={'value': 'atenção'}
+    #         )
+
+    #     return data
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password != password2:
+            raise ValidationError({
+                'password': 'Password and password2 must be equal',
+                'password2': 'Password and password2 must be equal'
+            })
