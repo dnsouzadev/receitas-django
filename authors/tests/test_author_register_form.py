@@ -22,8 +22,10 @@ class AuthorRegisterFormUnitTest(TestCase):
         self.assertEqual(placeholder, place)
 
     @parameterized.expand([
-        ('username', 'Obrigatório. 150 caracteres ou menos. '
-            'Letras, números e @/./+/-/_ apenas.'),
+        ('username',
+            'Username must have letters, numbers or one of those @.+-_. '
+            'The length should be between 4 and 150 characteres.'
+         ),
         ('password', 'Password must have at least one uppercase letter, '
             'one lowercase letter and one number. The length should be '
             'at least 8 characters.'),
@@ -74,3 +76,21 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get(field))
+
+    def test_username_field_min_length_should_be_4(self):
+        self.form_data['username'] = 'tes'
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        msg = 'Username must have at least 4 characters'
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('username'))
+
+    def test_username_field_max_length_should_be_150(self):
+        self.form_data['username'] = 'tes' * 60
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        msg = 'Username must be a maximum of 150 characters'
+        self.assertIn(msg, response.content.decode('utf-8'))
+        self.assertIn(msg, response.context['form'].errors.get('username'))
