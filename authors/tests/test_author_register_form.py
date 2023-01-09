@@ -57,8 +57,8 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
             'first_name': 'first',
             'last_name': 'last',
             'email': 'email@email.com',
-            'password': 'kdfmffd',
-            'password2': 'kdfmffd'
+            'password': 'K@dfmffd123',
+            'password2': 'K@dfmffd123'
         }
         return super().setUp(*args, **kwargs)
 
@@ -132,3 +132,16 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         url = reverse('authors:create')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_email_already_in_use(self):
+        url = reverse('authors:create')
+
+        self.client.post(url, data=self.form_data, follow=True)
+
+        self.form_data['username'] = '@A123abc1235'
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        msg = 'User e-mail is already in use'
+
+        self.assertIn(msg, response.context['form'].errors['email'])
+        self.assertIn(msg, response.content.decode('utf-8'))
