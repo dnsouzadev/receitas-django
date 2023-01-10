@@ -36,7 +36,8 @@ def register_create(request):
 
         del (request.session['register_form_data'])
 
-    return redirect(reverse('authors:login'))
+        return redirect(reverse('authors:login'))
+    return redirect(reverse('authors:register'))
 
 
 def login_view(request):
