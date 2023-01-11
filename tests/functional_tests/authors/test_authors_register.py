@@ -62,12 +62,40 @@ class AuthorsRegisterTest(AuthorsBaseTest):
     def test_empty_username_error_message(self):
 
         def callback(form):
-            last_name_field = self.get_by_placeholder(form, 'Your username')
-            last_name_field.send_keys(' ')
-            last_name_field.send_keys(Keys.ENTER)
+            username_field = self.get_by_placeholder(form, 'Your username')
+            username_field.send_keys(' ')
+            username_field.send_keys(Keys.ENTER)
 
             form = self.get_form()
 
             self.assertIn('This field must not be empty', form.text)
+
+        self.form_field_test_with_callback(callback)
+
+    def test_invalid_email_error_message(self):
+
+        def callback(form):
+            email_field = self.get_by_placeholder(form, 'Your e-mail')
+            email_field.send_keys('email@invalid')
+            email_field.send_keys(Keys.ENTER)
+
+            form = self.get_form()
+
+            self.assertIn('The e-mail must be valid.', form.text)
+
+        self.form_field_test_with_callback(callback)
+
+    def test_password_do_not_match(self):
+
+        def callback(form):
+            password1 = self.get_by_placeholder(form, 'Type your password')
+            password2 = self.get_by_placeholder(form, 'Repeat your password')
+            password1.send_keys('Senh@123')
+            password2.send_keys('Senh@1233')
+            password2.send_keys(Keys.ENTER)
+
+            form = self.get_form()
+
+            self.assertIn('The e-mail must be valid.', form.text)
 
         self.form_field_test_with_callback(callback)
