@@ -23,3 +23,16 @@ class AuthorLogoutTest(TestCase):
 
         self.assertIn('Invalid logout user',
                       response.content.decode('utf-8'))
+
+    def test_user_can_logout_successfully(self):
+        User.objects.create_user(username='my_user', password='my_pass')
+        self.client.login(username='my_user', password='my_pass')
+
+        response = self.client.post(
+            reverse('authors:logout'), data={
+                'username': 'my_user',
+            }, follow=True
+        )
+
+        self.assertIn('Logged out successfully',
+                      response.content.decode('utf-8'))
