@@ -96,6 +96,6 @@ class AuthorsRegisterTest(AuthorsBaseTest):
 
             form = self.get_form()
 
-            self.assertIn('The e-mail must be valid.', form.text)
+            self.assertIn('Password and password2 must be equal', form.text)
 
         self.form_field_test_with_callback(callback)
