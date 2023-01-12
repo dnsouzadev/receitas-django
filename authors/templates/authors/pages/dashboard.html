@@ -4,10 +4,27 @@
 
 {% block content %}
     <div class="main-content center container">
+        {% include 'global/partials/message.html'%}  
         <h2>Dashboard ({{ user }})</h2>
         {% include 'authors/partials/login_message.html' %}
+
+        <div class="authors-dashboard-container">
+            <h3>Your Recipes</h3>
+
+            <ul>
+                {% for recipe in recipes %}
+                <li>
+                    <a href="#">{{ recipe.title }}</a>
+                </li>
+                {% empty %}
+                    <li>
+                        <p>Your do not have recipes, please create one.</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
-    {% include 'global/partials/message.html'%}    
+      
 
 {% endblock content %}
