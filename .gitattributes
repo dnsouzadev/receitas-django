@@ -1,3 +1,4 @@
 *.python linguist-detectable=true
+*.css linguist-vendored=false
 static/* linguist-vendored
 base_static/* linguist-vendored
